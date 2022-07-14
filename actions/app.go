@@ -1,18 +1,18 @@
 package actions
 
 import (
-  "github.com/gobuffalo/envy"
-  "github.com/gobuffalo/buffalo"
-  forcessl "github.com/gobuffalo/mw-forcessl"
-  paramlogger "github.com/gobuffalo/mw-paramlogger"
-  "github.com/unrolled/secure"
+	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/envy"
+	forcessl "github.com/gobuffalo/mw-forcessl"
+	paramlogger "github.com/gobuffalo/mw-paramlogger"
+	"github.com/unrolled/secure"
 
-  
-  "coke/models"
-  "github.com/gobuffalo/buffalo-pop/v2/pop/popmw"
-  csrf "github.com/gobuffalo/mw-csrf"
-  i18n "github.com/gobuffalo/mw-i18n"
-  "github.com/gobuffalo/packr/v2"
+	"coke/models"
+
+	"github.com/gobuffalo/buffalo-pop/v2/pop/popmw"
+	csrf "github.com/gobuffalo/mw-csrf"
+	i18n "github.com/gobuffalo/mw-i18n"
+	"github.com/gobuffalo/packr/v2"
 )
 
 // ENV is used to help switch settings based on where the
@@ -35,38 +35,36 @@ var T *i18n.Translator
 // placed last in the route declarations, as it will prevent routes
 // declared after it to never be called.
 func App() *buffalo.App {
-  if app == nil {
-    app = buffalo.New(buffalo.Options{
-      Env: ENV,
-      SessionName: "_coke_session",
-    })
+	if app == nil {
+		app = buffalo.New(buffalo.Options{
+			Env:         ENV,
+			SessionName: "_coke_session",
+		})
 
-    // Automatically redirect to SSL
-    app.Use(forceSSL())
+		// Automatically redirect to SSL
+		app.Use(forceSSL())
 
-    // Log request parameters (filters apply).
-    app.Use(paramlogger.ParameterLogger)
+		// Log request parameters (filters apply).
+		app.Use(paramlogger.ParameterLogger)
 
-    // Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
-    // Remove to disable this.
-    app.Use(csrf.New)
+		// Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+		// Remove to disable this.
+		app.Use(csrf.New)
 
-    
-    // Wraps each request in a transaction.
-    //  c.Value("tx").(*pop.Connection)
-    // Remove to disable this.
-    app.Use(popmw.Transaction(models.DB))
-    
+		// Wraps each request in a transaction.
+		//  c.Value("tx").(*pop.Connection)
+		// Remove to disable this.
+		app.Use(popmw.Transaction(models.DB))
 
-    // Setup and use translations:
-    app.Use(translations())
+		// Setup and use translations:
+		app.Use(translations())
 
-    app.GET("/", HomeHandler)
+		app.GET("/", HomeHandler)
 
-    app.ServeFiles("/", assetsBox) // serve files from the public directory
-  }
+		app.ServeFiles("/", assetsBox) // serve files from the public directory
+	}
 
-  return app
+	return app
 }
 
 // translations will load locale files, set up the translator `actions.T`,
@@ -74,11 +72,11 @@ func App() *buffalo.App {
 // request.
 // for more information: https://gobuffalo.io/en/docs/localization
 func translations() buffalo.MiddlewareFunc {
-  var err error
-  if T, err = i18n.New(packr.New("app:locales", "../locales"), "en-US"); err != nil {
-    app.Stop(err)
-  }
-  return T.Middleware()
+	var err error
+	if T, err = i18n.New(packr.New("app:locales", "../locales"), "en-US"); err != nil {
+		app.Stop(err)
+	}
+	return T.Middleware()
 }
 
 // forceSSL will return a middleware that will redirect an incoming request
@@ -87,8 +85,8 @@ func translations() buffalo.MiddlewareFunc {
 // we recommend using a proxy: https://gobuffalo.io/en/docs/proxy
 // for more information: https://github.com/unrolled/secure/
 func forceSSL() buffalo.MiddlewareFunc {
-  return forcessl.Middleware(secure.Options{
-    SSLRedirect:     ENV == "production",
-    SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
-  })
+	return forcessl.Middleware(secure.Options{
+		SSLRedirect:     ENV == "production",
+		SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
+	})
 }

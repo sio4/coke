@@ -15,8 +15,7 @@ export LANG=C
 go install -tags sqlite github.com/gobuffalo/cli/cmd/buffalo@$version
 buffalo version
 
-git rm -r * .[A-fh-z0-9]*
-git restore --staged $persistent
+rm -rf * .[A-fh-z0-9]*
 git restore $persistent
 
 buffalo new coke --db-type sqlite3 --vcs none

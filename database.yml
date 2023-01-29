@@ -1,0 +1,12 @@
+---
+development:
+  dialect: "sqlite3"
+  database: coke_development.sqlite
+
+test:
+  dialect: "sqlite3"
+  database: coke_test.sqlite
+
+production:
+  dialect: "sqlite3"
+  database: coke_production.sqlite

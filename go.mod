@@ -4,13 +4,13 @@ go 1.17
 
 require (
 	github.com/gobuffalo/buffalo v0.18.7
-	github.com/gobuffalo/buffalo-pop/v3 v3.0.3
+	github.com/gobuffalo/buffalo-pop/v3 v3.0.4
 	github.com/gobuffalo/envy v1.10.1
 	github.com/gobuffalo/mw-csrf v1.0.0
 	github.com/gobuffalo/mw-forcessl v0.0.0-20220514125302-be60179938a4
 	github.com/gobuffalo/mw-i18n/v2 v2.0.1
 	github.com/gobuffalo/mw-paramlogger v1.0.0
-	github.com/gobuffalo/pop/v6 v6.0.3
+	github.com/gobuffalo/pop/v6 v6.0.4
 	github.com/gobuffalo/suite/v4 v4.0.2
 	github.com/markbates/grift v1.5.0
 	github.com/unrolled/secure v1.10.0
@@ -69,7 +69,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/monoculum/formam v3.5.5+incompatible // indirect
 	github.com/nicksnyder/go-i18n v1.10.1 // indirect
-	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/pelletier/go-toml v1.9.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect

@@ -1,18 +1,22 @@
 package actions
 
 import (
-	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/envy"
-	forcessl "github.com/gobuffalo/mw-forcessl"
-	paramlogger "github.com/gobuffalo/mw-paramlogger"
-	"github.com/unrolled/secure"
+	"net/http"
+
+	"coke/locales"
 
 	"coke/models"
+	"coke/public"
 
-	"github.com/gobuffalo/buffalo-pop/v2/pop/popmw"
+	"github.com/gobuffalo/buffalo"
+
+	"github.com/gobuffalo/buffalo-pop/v3/pop/popmw"
+	"github.com/gobuffalo/envy"
 	csrf "github.com/gobuffalo/mw-csrf"
-	i18n "github.com/gobuffalo/mw-i18n"
-	"github.com/gobuffalo/packr/v2"
+	forcessl "github.com/gobuffalo/mw-forcessl"
+	i18n "github.com/gobuffalo/mw-i18n/v2"
+	paramlogger "github.com/gobuffalo/mw-paramlogger"
+	"github.com/unrolled/secure"
 )
 
 // ENV is used to help switch settings based on where the
@@ -52,7 +56,7 @@ func App() *buffalo.App {
 		app.Use(csrf.New)
 
 		// Wraps each request in a transaction.
-		//  c.Value("tx").(*pop.Connection)
+		//   c.Value("tx").(*pop.Connection)
 		// Remove to disable this.
 		app.Use(popmw.Transaction(models.DB))
 
@@ -61,7 +65,7 @@ func App() *buffalo.App {
 
 		app.GET("/", HomeHandler)
 
-		app.ServeFiles("/", assetsBox) // serve files from the public directory
+		app.ServeFiles("/", http.FS(public.FS())) // serve files from the public directory
 	}
 
 	return app
@@ -73,7 +77,7 @@ func App() *buffalo.App {
 // for more information: https://gobuffalo.io/en/docs/localization
 func translations() buffalo.MiddlewareFunc {
 	var err error
-	if T, err = i18n.New(packr.New("app:locales", "../locales"), "en-US"); err != nil {
+	if T, err = i18n.New(locales.FS(), "en-US"); err != nil {
 		app.Stop(err)
 	}
 	return T.Middleware()

@@ -1,6 +1,6 @@
 # This is a multi-stage Dockerfile and requires >= Docker 17.05
 # https://docs.docker.com/engine/userguide/eng-image/multistage-build/
-FROM gobuffalo/buffalo:v0.18.7 as builder
+FROM gobuffalo/buffalo:v0.18.13 as builder
 
 ENV GOPROXY http://proxy.golang.org
 

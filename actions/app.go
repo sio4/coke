@@ -2,6 +2,7 @@ package actions
 
 import (
 	"net/http"
+	"sync"
 
 	"coke/locales"
 	"coke/models"
@@ -22,8 +23,9 @@ import (
 var ENV = envy.Get("GO_ENV", "development")
 
 var (
-	app *buffalo.App
-	T   *i18n.Translator
+	app     *buffalo.App
+	appOnce sync.Once
+	T       *i18n.Translator
 )
 
 // App is where all routes and middleware for buffalo
@@ -40,7 +42,7 @@ var (
 // placed last in the route declarations, as it will prevent routes
 // declared after it to never be called.
 func App() *buffalo.App {
-	if app == nil {
+	appOnce.Do(func() {
 		app = buffalo.New(buffalo.Options{
 			Env:         ENV,
 			SessionName: "_coke_session",
@@ -66,7 +68,7 @@ func App() *buffalo.App {
 		app.GET("/", HomeHandler)
 
 		app.ServeFiles("/", http.FS(public.FS())) // serve files from the public directory
-	}
+	})
 
 	return app
 }

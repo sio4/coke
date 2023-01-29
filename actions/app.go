@@ -4,12 +4,10 @@ import (
 	"net/http"
 
 	"coke/locales"
-
 	"coke/models"
 	"coke/public"
 
 	"github.com/gobuffalo/buffalo"
-
 	"github.com/gobuffalo/buffalo-pop/v3/pop/popmw"
 	"github.com/gobuffalo/envy"
 	csrf "github.com/gobuffalo/mw-csrf"
@@ -59,7 +57,6 @@ func App() *buffalo.App {
 		//   c.Value("tx").(*pop.Connection)
 		// Remove to disable this.
 		app.Use(popmw.Transaction(models.DB))
-
 		// Setup and use translations:
 		app.Use(translations())
 
